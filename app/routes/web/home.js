@@ -9,14 +9,13 @@ const registerController = require('app/http/controllers/auth/registercontroller
 
 
 
+
+
 // home router
 router.get('/', homeController.index);
 router.get('/login', loginController.showLoginForm);
-router.get('/register', registerController.showRegistrationForm);
-
-
-
-
+router.get('/register', registerController.showRegisterForm);
+router.post('/register', registerController.registerProccess);
 
 
 
