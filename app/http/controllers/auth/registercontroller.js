@@ -3,15 +3,17 @@ const controller = require('app/http/controllers/controller');
 class registerController extends controller{
 
     showRegisterForm (req , res) {
-        res.render('auth/register' , { messages : req.flash('errors') });
+        res.render('auth/register', {messages : req.flash('errors'), recaptcha: this.recaptcha.render()});
     }
     
     registerProccess (req , res , next) {
-        this.validationData (req)
-            .then(result => {
+        this.recaptchaValidation(req, res)
+        .then(result => this.validationData(req))
+        .then(result => {
                 if(result)  res.json('registerProccess')
                 else res.redirect('/register');
-            });   
+        })
+        .catch(err => console.log(err));
     }
 
     validationData (req){
@@ -29,8 +31,8 @@ class registerController extends controller{
                    if (errors.length == 0)
                         return true;
 
-                   let messages = [];
-                   errors.forE(err => messages.push(err.msg))
+                   const messages = [];
+                   errors.forEach(err => messages.push(err.msg))
 
                    req.flash('errors' , messages);
                         return false;
