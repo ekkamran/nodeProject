@@ -4,7 +4,7 @@ const passport = require('passport');
 class registerController extends controller{
 
     showRegisterForm (req , res) {
-        res.render('auth/register', {messages : req.flash('errors'), recaptcha: this.recaptcha.render()});
+        res.render('auth/register', { errors: req.flash('errors'), recaptcha: this.recaptcha.render()});
     }
     
     registerProccess (req , res , next) {
@@ -19,7 +19,7 @@ class registerController extends controller{
 
     validationData (req){
         req.checkBody('name' , 'فیلد نام نمیتواند خالی بماند').notEmpty();
-        req.checkBody('name' , 'فیلد پسورد نمیتواند کمتر از 5 کاراکتر باشد').isLength({min:5});
+        req.checkBody('name' , 'فیلد نام نمیتواند کمتر از 5 کاراکتر باشد').isLength({min:5});
         req.checkBody('email' , 'فیلد ایمیل نمیتواند خالی بماند').notEmpty();
         req.checkBody('email' , 'فیلد ایمیل معتبر نمی باشد').isEmail();
         req.checkBody('password' , 'فیلد پسورد نمیتواند خالی بماند').notEmpty();

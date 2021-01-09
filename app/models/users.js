@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema({
     admin : { type : Boolean , default : true},
     email : { type : String , unique : true, require : true},
     password : { type : String , require : true},
-} , { timestamps : true });
+}, { timestamps : true });
 
 userSchema.pre('save' , function(next) {
 
@@ -15,6 +15,11 @@ userSchema.pre('save' , function(next) {
         this.password = hash;
         next();
     });
+});
+
+    userSchema.methods.comparePassword = function(password) {
+        return bcrypt.compareSync(password, this.password);
+    } 
     
-})
+
 module.exports = mongoose.model('User', userSchema);
