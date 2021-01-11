@@ -10,7 +10,8 @@ const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const passport = require('passport');
-
+const Helpers = require('./helpers')
+const rememberLogin = require('app/http/middleware/rememberLogin')
 
 
 
@@ -68,6 +69,11 @@ module.exports = class Application{
           
          app.use(cookieParser('mysecretkey'));
          app.use(flash());
+         app.use(rememberLogin.handle);
+         app.use((req, res, next) => {
+             app.locals = new Helpers(req, res).getObjects();
+             next();
+         })
 
 
     }
