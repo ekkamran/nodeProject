@@ -9,9 +9,9 @@ module.exports=class controller{
 
    recaptchaConfig(){
        this.recaptcha = new Recaptcha(
-        '6Ldtht0ZAAAAAN_JYbnFwvA5x-RhlrX3W_4X6Glb',
-        '6Ldtht0ZAAAAAHI2yM-c1tSMrtHkVYjK1Q7aJ_CA',
-        {hl:'fa'}
+        config.service.recaptcha.client_key,
+        config.service.recaptcha.secret_key,
+        {...config.service.recaptcha.options},
        );
    }
 
