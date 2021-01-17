@@ -17,27 +17,6 @@ class loginController extends controller{
         .catch(err => console.log(err));
     }
 
-    validationData (req){
-        req.checkBody('email' , 'فیلد ایمیل معتبر نمی باشد').isEmail();
-        req.checkBody('password' , 'فیلد پسورد نمیتواند کمتر از 8 کاراکتر باشد ' ).isLength({min:8});
-
-       return req.getValidationResult()
-            .then(result => {
-                   const errors = result.array();
-               
-                   if (errors.length == 0)
-                        return true;
-
-                   const messages = [];
-                   errors.forEach(err => messages.push(err.msg))
-
-                   req.flash('errors' , messages);
-                        return false;
-              })
-           .catch(err => console.log(err));
-        
-    }
-
     login(req, res, next) {
         passport.authenticate('local.login' , (err, user) => {
             if(!user) return res.redirect('/login');
