@@ -8,8 +8,9 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const passport = require('passport');
-const Helpers = require('./helpers')
-const rememberLogin = require('app/http/middleware/rememberLogin')
+const Helpers = require('./helpers');
+const rememberLogin = require('app/http/middleware/rememberLogin');
+
 
 
 
@@ -48,6 +49,10 @@ module.exports = class Application{
          app.use(express.static(config.layoutes.public_dir));
          app.set('view engine',config.layoutes.view_engine);
          app.set('views',config.layoutes.view_dir);
+         app.use(config.layoutes.ejs.expressLayouts );
+         app.set("layout extractScripts", config.layoutes.ejs.extractScripts)
+         app.set("layout extractStyles", config.layoutes.ejs.extractStyles);
+         app.set("layout", config.layoutes.ejs.master);
 
          app.use(bodyParser.json());
          app.use(bodyParser.urlencoded({extended:true}));

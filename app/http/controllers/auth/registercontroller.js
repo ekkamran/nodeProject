@@ -4,7 +4,8 @@ const passport = require('passport');
 class registerController extends controller{
 
     showRegisterForm (req , res) {
-        res.render('auth/register', { errors: req.flash('errors'), recaptcha: this.recaptcha.render()});
+        const title = "صفحه عضویت";
+        res.render('home/auth/register', { errors: req.flash('errors'), recaptcha: this.recaptcha.render(), title});
     }
     
     registerProccess (req , res , next) {
