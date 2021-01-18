@@ -21,7 +21,7 @@ class registerController extends controller{
     register(req, res, next) {
         passport.authenticate('local.register' , {
             successRedirect : '/',
-            failureRedirect : '/register',
+            failureRedirect : '/auth/register',
             failureFlash : true
         })(req, res, next);
     }

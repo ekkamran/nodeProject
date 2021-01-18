@@ -46,6 +46,8 @@ module.exports = class Application{
 
     setConfig(){
          require('app/passport/passport-local');
+         require('app/passport/passport-google');
+         
          app.use(express.static(config.layoutes.public_dir));
          app.set('view engine',config.layoutes.view_engine);
          app.set('views',config.layoutes.view_dir);
