@@ -7,7 +7,7 @@
             <div class="card-body">
                 <form class="form-horizontal" method="POST" action="/auth/login" novalidate>
 
-                    <%- include('./../layoutes/error-messages') -%>
+                    <%- include('./../layouts/error-messages') -%>
 
 
                     <div class="form-group">
@@ -21,21 +21,17 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="checkbox">
-                            <input type="checkbox" name="remember"> یادآوری ورود
-                            <label>
-                            </label>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
                         <%- recaptcha %>
                     </div>
 
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary">ورود</button>
-                            <a href="/auth/google" class="btn btn-danger">ورود با اکانت گوگل</a> 
+                        <button type="submit" class="btn btn-primary">
+                            ورود
+                        </button>
+                        <a href="/auth/google" class="btn btn-danger">ورود با اکانت گوگل</a>
+                        <a class="btn btn-link" href="/auth/password/reset">
+                            رمز عبور را فراموش کردم!
+                        </a>
                     </div>
                 </form>
             </div>

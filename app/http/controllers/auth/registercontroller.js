@@ -8,14 +8,14 @@ class registerController extends controller{
         res.render('home/auth/register', { errors: req.flash('errors'), recaptcha: this.recaptcha.render(), title});
     }
     
-    registerProccess (req , res , next) {
-        this.recaptchaValidation(req, res)
-        .then(result => this.validationData(req))
-        .then(result => {
-                if(result)  this.register(req, res, next);
-                else res.redirect('/register');
-        })
-        .catch(err => console.log(err));
+    async registerProccess(req  ,res , next) {
+        await this.recaptchaValidation(req , res);
+        let result = await this.validationData(req)
+        if(result) {
+            return this.register(req, res, next);
+        } 
+            
+        return res.redirect('/auth/register');
     }
 
     register(req, res, next) {

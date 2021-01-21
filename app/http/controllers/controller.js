@@ -17,36 +17,35 @@ module.exports=class controller{
        );
    }
 
-   recaptchaValidation(req,res){
-       return new Promise((resolve,reject) => {
-           this.recaptcha.verify(req, (err, data) => {
-               if(err){
-                   //req.flash('errors', 'گزینه امنیتی مربوط خاموش می باشد ');
-                   //res.redirect(req.url);
-                   resolve(true)
-               } else {
-                   resolve(true)
-               }
-           });
+   recaptchaValidation(req , res) {
+    return new Promise((resolve , reject) => {
+        this.recaptcha.verify(req , (err , data) => {
+            if(err) {
+                req.flash('errors' , 'گزینه امنیتی مربوط به شناسایی روبات خاموش است، لطفا از فعال بودن آن اطمینان حاصل نمایید و مجدد امتحان کنید');
+                this.back(req,res)
+            } else resolve(true);
+        })
+    })
+}
 
-       });
-   }
-
-   validationData (req){
-       const result = validationResult(req);
-       if(! result.isEmpty()) {
-            const errors = result.array();
-            const messages = [];
-
-            errors.forEach(err => messages.push(err.msg));
-
-            req.flash('errors' , messages)
-
-            return false;
-
-       }
+    async validationData(req) {
+        const result = validationResult(req);
+        if (! result.isEmpty()) {
+        const errors = result.array();
+        const messages = [];
        
-       return true;  
+        errors.forEach(err => messages.push(err.msg));
+
+        req.flash('errors' , messages)
+
+        return false;
+        }
+
+    return true;
+    }
+
+    back(req , res) {
+        return res.redirect(req.header('Referer') || '/');
     }
 }
     
