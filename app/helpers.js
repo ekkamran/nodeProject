@@ -1,3 +1,4 @@
+const path = require('path');
 
 module.exports = class Helpers {
     constructor(req, res){
@@ -7,7 +8,8 @@ module.exports = class Helpers {
 
     getObjects() {
         return {
-            auth: this.auth()
+            auth: this.auth(),
+            viewPath : this.viewPath
         }
     }
 
@@ -16,5 +18,9 @@ module.exports = class Helpers {
             check: this.req.isAuthenticated(),
             user: this.req.user
         }
-    }   
+    }  
+    
+    viewPath(dir) {
+        return path.resolve(config.layout.view_dir + '/' + dir);
+    }
 }
