@@ -48,13 +48,13 @@ module.exports = class Application{
          require('app/passport/passport-local');
          require('app/passport/passport-google');
          
-         app.use(express.static(config.layoutes.public_dir));
-         app.set('view engine',config.layoutes.view_engine);
-         app.set('views',config.layoutes.view_dir);
-         app.use(config.layoutes.ejs.expressLayouts );
-         app.set("layout extractScripts", config.layoutes.ejs.extractScripts)
-         app.set("layout extractStyles", config.layoutes.ejs.extractStyles);
-         app.set("layout", config.layoutes.ejs.master);
+         app.use(express.static(config.layout.public_dir));
+         app.set('view engine',config.layout.view_engine);
+         app.set('views',config.layout.view_dir);
+         app.use(config.layout.ejs.expressLayouts );
+         app.set("layout extractScripts", config.layout.ejs.extractScripts)
+         app.set("layout extractStyles", config.layout.ejs.extractStyles);
+         app.set("layout", config.layout.ejs.master);
 
          app.use(bodyParser.json());
          app.use(bodyParser.urlencoded({extended:true}));

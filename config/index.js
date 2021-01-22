@@ -1,11 +1,11 @@
 const database = require('./database');
-const layoutes = require('./layoutes');
+const layout = require('./layout');
 const service = require('./service');
 const session = require('./session');
 
 module.exports = {
     database,
-    layoutes,
+    layout,
     service,
     session,
     port: process.env.APPLICATION_PORT,
