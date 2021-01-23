@@ -5,7 +5,7 @@ class registerController extends controller{
 
     showRegisterForm (req , res) {
         const title = "صفحه عضویت";
-        res.render('home/auth/register', { errors: req.flash('errors'), recaptcha: this.recaptcha.render(), title});
+        res.render('home/auth/register', { recaptcha: this.recaptcha.render(), title});
     }
     
     async registerProccess(req  ,res , next) {
@@ -14,7 +14,8 @@ class registerController extends controller{
         if(result) {
             return this.register(req, res, next);
         } 
-            
+        
+        req.flash('formData' , req.body);
         return res.redirect('/auth/register');
     }
 

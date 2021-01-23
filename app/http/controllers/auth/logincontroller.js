@@ -5,7 +5,7 @@ class loginController extends controller{
 
     showLoginForm(req , res){
         const title = "صفحه ورود";
-        res.render('home/auth/login', { errors: req.flash('errors'), recaptcha: this.recaptcha.render(), title});
+        res.render('home/auth/login', { recaptcha: this.recaptcha.render(), title});
     }
 
     async loginProccess(req  ,res , next) {
@@ -14,7 +14,8 @@ class loginController extends controller{
         if(result) {
             return this.login(req, res, next);
         } 
-            
+         
+        req.flash('formData' , req.body);
         return res.redirect('/auth/login');
     }
 
