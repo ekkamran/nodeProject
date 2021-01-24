@@ -23,8 +23,9 @@ class resetPasswordController extends controller{
             return this.resetPassword(req, res)
         } 
 
-        req.flash('formData' , req.body);   
-        return res.redirect('/auth/password/reset/' + req.body.token);
+        this.back(req, res);
+       // req.flash('formData' , req.body);   
+        //return res.redirect('/auth/password/reset/' + req.body.token);
     }
 
 
