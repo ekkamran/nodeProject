@@ -1,8 +1,10 @@
 const validator = require('./validator');
 const { check } = require('express-validator/check');
 const Course = require('app/models/course');
+const path = require('path');
 
 class courseValidator extends validator {
+    
     handle() {
         return [
             check('title')
@@ -14,6 +16,16 @@ class courseValidator extends validator {
                         throw new Error('چنین دوره ای با این عنوان قبلا در سایت قرار داد شده است')
                     }
                 }),
+
+            check('images')
+                 .custom(async value => {
+                     if(! value)
+                        throw new Error('وارد کردن تصویر الزامی است');
+
+                     let fileExt = ['.png' , '.jpg' , 'jpeg' , 'svg'];
+                     if(! fileExt.includes(path.extname(value)))
+                         throw new Error('پسوند فایل وارد شده از پسوندهای تصاویر نیست')   
+                 }),   
 
             check('type')
                 .not().isEmpty()
