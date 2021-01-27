@@ -22,7 +22,7 @@ class courseValidator extends validator {
                      if(! value)
                         throw new Error('وارد کردن تصویر الزامی است');
 
-                     let fileExt = ['.png' , '.jpg' , 'jpeg' , 'svg'];
+                     let fileExt = ['.png' , '.jpg' , '.JPG' , 'jpeg' , 'svg'];
                      if(! fileExt.includes(path.extname(value)))
                          throw new Error('پسوند فایل وارد شده از پسوندهای تصاویر نیست')   
                  }),   
