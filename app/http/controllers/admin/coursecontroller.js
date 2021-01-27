@@ -19,7 +19,7 @@ class courseController extends controller {
         let status = await this.validationData(req);
         if(! status) {
             if(req.file) 
-                fs.unlink(req.file.path ,(err) => {});
+                fs.unlinkSync(req.file.path);
             return this.back(req, res);
         }
 
@@ -34,13 +34,29 @@ class courseController extends controller {
             body,
             type,
             price,
-            images : JSON.stringify(images) ,
+            images,
+            thumb: images[480],
             tags
         });
 
         await newCourse.save();
 
         return res.redirect('/admin/courses');  
+    }
+
+    async destroy(req, res) {
+        let course = await Course.findById(req.params.id);
+        if(! course) {
+            return res.json('چنین دوره ای یافت نشد');
+        }
+        //delete episodes
+
+        //delete Images
+        Object.values(course.images).forEach(image => fs.unlinkSync(`./public${image}`));
+        // delete courses
+        course.remove();
+
+        return res.redirect('/admin/courses');
     }
 
     imageResize(image) {

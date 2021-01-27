@@ -9,4 +9,4 @@ class adminController extends controller{
 
 }
     
-module.exports=new adminController()
+module.exports = new adminController()
