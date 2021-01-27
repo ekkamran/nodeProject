@@ -5,8 +5,10 @@ const path = require('path');
 const sharp = require('sharp');
 
 class courseController extends controller {
-    index(req, res) {
-        res.render('admin/courses/index',  { title : 'دوره ها' });
+    async index(req, res) {
+        let page = req.query.page || 1;
+        let courses = await Course.paginate({}, { page, sort: { createdAt: 1 }, limit: 2 });
+        res.render('admin/courses/index',  { title : 'دوره ها', courses });
     }
 
     create(req , res) {
