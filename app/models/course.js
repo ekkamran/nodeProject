@@ -7,6 +7,7 @@ const CourseSchema = Schema({
     title:{ type: String, required: true },
     slug:{ type: String, required: true },
     type:{ type: String, required: true },
+    body:{ type: String, required: true },
     price:{ type: String, required: true },
     images:{ type: Object, required: true },
     thumb:{ type: String, required: true },
