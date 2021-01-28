@@ -1,6 +1,7 @@
 const autoBind = require('auto-bind');
 const Recaptcha = require('express-recaptcha').RecaptchaV2;
 const { validationResult } = require('express-validator/check');
+const isMongoId = require('validator/lib/isMongoId');
 
 module.exports=class controller{
 
@@ -47,6 +48,17 @@ module.exports=class controller{
     back(req , res) {
         req.flash('formData' , req.body);
         return res.redirect(req.header('Referer') || '/');
+    }
+
+    isMongoId(paramId) {
+        if(! isMongoId(paramId))
+        this.error(404, 'ای دی وارد شده صحیح نمی باشد');
+    }
+
+    error(message, status = 500) {
+        let err = new Error(message);
+        err.status = status;
+        throw err;
     }
 }
     

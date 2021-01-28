@@ -16,7 +16,6 @@ const methodOverride = require('method-override');
 const rememberLogin = require('app/http/middleware/rememberLogin');
 
 module.exports = class Application{
-
     constructor(){
           this.setupExpress();
           this.setConfig();
