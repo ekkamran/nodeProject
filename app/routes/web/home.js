@@ -4,10 +4,7 @@ const router = express.Router();
 
 // controllers
 const homeController = require('app/http/controllers/homecontroller');
-
-// home router
-router.get('/', homeController.index);
-
+const courseController = require('app/http/controllers/coursecontroller')
 
 router.get('/logout', (req, res) => {
     req.logOut();
@@ -15,7 +12,11 @@ router.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-
+// home router
+router.get('/', homeController.index);
+router.get('/about-me', homeController.index);
+router.get('/courses', courseController.index);
+router.get('/courses/:course', courseController.single);
 
 
 module.exports = router

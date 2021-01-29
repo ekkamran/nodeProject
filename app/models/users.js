@@ -37,6 +37,20 @@ userSchema.methods.setRememberToken = function(res) {
             if(err) console.log(err);
         });
 } 
+
+userSchema.virtual('courses', {
+    ref: 'Course',
+    localField: '_id',
+    foreignField: 'user'
+});
+
+userSchema.methods.isVip = function() {
+    return true;
+}
+
+userSchema.methods.checkLearning = async function(course) {
+    return true;
+}
     
 
 module.exports = mongoose.model('User', userSchema);
