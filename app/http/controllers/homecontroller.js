@@ -6,10 +6,6 @@ class homeController extends controller{
         res.render('home/index');
     }
     
-    
-
-
 }
-
 
 module.exports=new homeController()

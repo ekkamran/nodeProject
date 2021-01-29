@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const mongoosePaginate = require('mongoose-paginate');
 
-const CourseSchema = Schema({
+const courseSchema = Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User'},
     title:{ type: String, required: true },
     slug:{ type: String, required: true },
@@ -18,9 +18,9 @@ const CourseSchema = Schema({
 }, { timestamps: true });
 
 
-CourseSchema.plugin(mongoosePaginate);
+courseSchema.plugin(mongoosePaginate);
 
-CourseSchema.methods.typeToPersian = function() {
+courseSchema.methods.typeToPersian = function() {
     switch (this.type) {
         case'cash':
                 return 'نقدی'
@@ -34,5 +34,11 @@ CourseSchema.methods.typeToPersian = function() {
     }
 }
 
+courseSchema.virtual('episodes', {
+    ref: 'Episode',
+    localField: '_id',
+    foreignField: 'course'
+})
 
-module.exports = mongoose.model('Course', CourseSchema);
+
+module.exports = mongoose.model('Course', courseSchema);

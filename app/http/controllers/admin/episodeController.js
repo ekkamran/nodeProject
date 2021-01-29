@@ -30,6 +30,7 @@ class episodeController extends controller {
             await newEpisode.save();
 
             // update course Times
+            this.updateCourseTime(req.body.course);
 
             return res.redirect('/admin/episodes');  
         } catch(err) {
@@ -84,6 +85,9 @@ class episodeController extends controller {
             // delete courses
             episode.remove();
 
+            //course time update
+            this.updateCourseTime(courseId);
+
             return res.redirect('/admin/episodes');
         } catch (err) {
             next(err);
@@ -91,9 +95,8 @@ class episodeController extends controller {
     }
 
     async updateCourseTime(courseId) {
-        let course = await Course.findById(courseId);
-        let episodes = await Episode.find({ course : courseId});
-        course.set({ time : this.getTime(episodes)});
+        let course = await Course.findById(courseId).populate('episodes').exec();
+        course.set({ time : this.getTime(course.episodes)});
         await course.save();
     }
 }

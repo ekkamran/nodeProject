@@ -56,14 +56,12 @@ class courseController extends controller {
 
     async edit(req, res,next) {
         try{
+            this.isMongoId(req.params.id);
             let course = await Course.findById(req.params.id);
-            if(! course) {
-                return res.json('چنین دوره ای وجود ندارد');
-            }
+            if(! course) this.error(404,'چنین دوره ای وجود ندارد');
 
             return res.render('admin/courses/edit', { course });
         } catch (err) {
-            res.statusCode = 500;
             next(err);
         }
     }
@@ -99,13 +97,14 @@ class courseController extends controller {
       
     }
 
-    async destroy(req, res) {
+    async destroy(req, res, next) {
         try {
+            this.isMongoId(req.params.id)
             let course = await Course.findById(req.params.id);
-            if(! course) {
-                return res.json('چنین دوره ای یافت نشد');
-            }
+            if(! course) this.error(404,'چنین دوره ای یافت نشد');
+           
             //delete episodes
+            course.episodes.forEach(episode => episode.remove());
     
             //delete Images
             Object.values(course.images).forEach(image => fs.unlinkSync(`./public${image}`));
