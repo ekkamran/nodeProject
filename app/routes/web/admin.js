@@ -4,9 +4,11 @@ const router = express.Router();
 //controller
 const adminController = require('app/http/controllers/admin/admincontroller')
 const courseController = require('app/http/controllers/admin/coursecontroller')
+const episodeController = require('app/http/controllers/admin/episodeController');
 
-//validator
+//validators
 const courseValidator = require('app/http/validators/coursevalidator')
+const episodeValidator = require('app/http/validators/episodeValidator');
 
 //Helpers
 const upload = require('app/helpers/uploadImage');
@@ -21,6 +23,8 @@ router.use((req, res, next) => {
 
 // admin router
 router.get('/', adminController.index);
+
+//Course Routes
 router.get('/courses', courseController.index);
 router.get('/courses/create', courseController.create);
 router.post('/courses/create',
@@ -38,4 +42,12 @@ courseController.update
 );
 router.delete('/courses/:id', courseController.destroy);
 
-module.exports = router
+// Episode Routes
+router.get('/episodes' , episodeController.index);
+router.get('/episodes/create' , episodeController.create);
+router.post('/episodes/create' , episodeValidator.handle() , episodeController.store );
+router.get('/episodes/:id/edit' , episodeController.edit);
+router.put('/episodes/:id' , episodeValidator.handle() , episodeController.update );
+router.delete('/episodes/:id' , episodeController.destroy);
+
+module.exports = router;
