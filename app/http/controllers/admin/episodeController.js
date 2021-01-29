@@ -41,11 +41,12 @@ class episodeController extends controller {
         try {
             this.isMongoId(req.params.id);
 
-            let course = await Course.findById(req.params.id);
-            if( ! course ) this.error('چنین دوره ای وجود ندارد' , 404);
+            let episode = await Episode.findById(req.params.id);
+            let courses = await Course.find({});
+            if( ! episode ) this.error(404, 'چنین ویدیو ای وجود ندارد');
 
 
-            return res.render('admin/courses/edit' , { course });
+            return res.render('admin/episodes/edit' , { episode, courses});
         } catch (err) {
             next(err);
         }
@@ -54,28 +55,18 @@ class episodeController extends controller {
     async update(req, res , next) {
         try {
             let status = await this.validationData(req);
-            if(! status) {
-                if(req.file) 
-                    fs.unlinkSync(req.file.path);
-                return this.back(req,res);
-            }
+            if(! status) return this.back(req,res);
 
-            let objForUpdate = {};
 
-            // set image thumb
-            objForUpdate.thumb = req.body.imagesThumb;
-
-            // check image 
-            if(req.file) {
-                objForUpdate.images = this.imageResize(req.file);
-                objForUpdate.thumb = objForUpdate.images[480];
-            }
-
-            delete req.body.images;
-            objForUpdate.slug = this.slug(req.body.title);
+            let episode = await Episode.findByIdAndUpdate(req.params.id , { $set : { ...req.body }})
             
-            await Course.findByIdAndUpdate(req.params.id , { $set : { ...req.body , ...objForUpdate }})
-            return res.redirect('/admin/courses');
+            //prev course time update
+            this.updateCourseTime(episode.course);
+            // now course time update
+            this.updateCourseTime(req.body.course);
+
+
+            return res.redirect('/admin/episodes');
         } catch(err) {
             next(err);
         }
@@ -86,7 +77,9 @@ class episodeController extends controller {
             this.isMongoId(req.params.id);
 
             let episode = await Episode.findById(req.params.id);
-            if( ! episode ) this.error('چنین ویدیو ای وجود ندارد' , 404);
+            if( ! episode ) this.error(404, 'چنین ویدیو ای وجود ندارد');
+
+            let courseId = episode.course;
 
             // delete courses
             episode.remove();
@@ -95,6 +88,13 @@ class episodeController extends controller {
         } catch (err) {
             next(err);
         }
+    }
+
+    async updateCourseTime(courseId) {
+        let course = await Course.findById(courseId);
+        let episodes = await Episode.find({ course : courseId});
+        course.set({ time : this.getTime(episodes)});
+        await course.save();
     }
 }
 

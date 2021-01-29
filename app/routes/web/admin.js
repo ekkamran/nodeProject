@@ -21,7 +21,7 @@ router.use((req, res, next) => {
     next();
 })
 
-// admin router
+// Admin Routes
 router.get('/', adminController.index);
 
 //Course Routes
