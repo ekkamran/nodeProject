@@ -13,7 +13,7 @@ const episodeSchema = Schema({
     videoUrl : { type : String , required : true },
     downloadCount : { type : Number , default : 0 },
     viewCount : { type : Number , default : 0 },
-    commentCount : { type : String , default : 0 },
+    commentCount : { type : Number , default : 0 },
 } , { timestamps : true });
 
 episodeSchema.plugin(mongoosePaginate);
@@ -33,7 +33,7 @@ episodeSchema.methods.typeToPersian = function() {
 }
 
 episodeSchema.methods.download = function(check, canUserUse) {
-    if(! check) return "#";
+    if(! check) return '#';
 
     let status = false;
     if(this.type == 'free') {
@@ -44,13 +44,22 @@ episodeSchema.methods.download = function(check, canUserUse) {
 
     let timestamps = new Date().getTime() + 3600 * 1000 * 12;
 
-    let text = `aQTR@!#Fa#!@%SDQGGASDF${this.id}${timestamps}`
+    let text = `aQTR@!#Fa#%!@%SDQGGASDF${this.id}${timestamps}`
 
     let salt = bcrypt.genSaltSync(15);
-    let hash = bcrypt.hashSync(text, salt);
+    let hash = bcrypt.hashSync(text , salt); 
+    
 
-
-    return status ? `/download/${this.id}?mac=${hash}&t=${timestamps}`: '#';
+    return status ? `/download/${this.id}?mac=${hash}&t=${timestamps}` : '#';
+}
+//33
+episodeSchema.methods.path = function() {
+    return `${this.course.path()}/${this.number}`;
+}
+//34
+episodeSchema.methods.inc = async function(field, num = 1) {
+    this[field] += num;
+    await this.save();
 }
 
 module.exports = mongoose.model('Episode' , episodeSchema);

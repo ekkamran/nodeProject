@@ -14,7 +14,7 @@ const courseSchema = Schema({
     tags:{ type: String, required: true },
     time:{ type: String, default: '00:00:00' },
     viewCount:{ type: Number, default: 0 },
-    commentCount:{ type: String, default: 0 },
+    commentCount:{ type: Number, default: 0 },
 }, { timestamps: true , toJSON: {virtuals: true} });
 
 courseSchema.plugin(mongoosePaginate);
@@ -36,11 +36,21 @@ courseSchema.methods.typeToPersian = function() {
 courseSchema.methods.path = function() {
     return `/courses/${this.slug}`;
 }
-
+ //34
+ courseSchema.methods.inc = async function(field, num = 1) {
+     this[field] += num;
+     await this.save();
+ }
 courseSchema.virtual('episodes', {
     ref: 'Episode',
     localField: '_id',
     foreignField: 'course'
+})
+
+courseSchema.virtual('comments' , {
+    ref : 'Comment',
+    localField : '_id',
+    foreignField : 'course'
 })
 
 

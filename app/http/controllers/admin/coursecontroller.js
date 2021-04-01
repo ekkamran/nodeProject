@@ -99,8 +99,9 @@ class courseController extends controller {
 
     async destroy(req, res, next) {
         try {
-            this.isMongoId(req.params.id)
-            let course = await Course.findById(req.params.id);
+            this.isMongoId(req.params.id);
+
+            let course = await Course.findById(req.params.id).populate('episodes').exec();
             if(! course) this.error(404,'چنین دوره ای یافت نشد');
            
             //delete episodes

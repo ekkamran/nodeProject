@@ -4,7 +4,13 @@ const router = express.Router();
 
 // controllers
 const homeController = require('app/http/controllers/homecontroller');
-const courseController = require('app/http/controllers/coursecontroller')
+const courseController = require('app/http/controllers/coursecontroller');
+
+//validator
+const commentValidator = require('app/http/validators/commentValidator');
+
+//middlewares
+const redirectIfNotAuthenticated = require('app/http/middleware/redirectIfNotAuthenticated');
 
 router.get('/logout', (req, res) => {
     req.logOut();
@@ -14,9 +20,12 @@ router.get('/logout', (req, res) => {
 
 // home router
 router.get('/', homeController.index);
-router.get('/about-me', homeController.index);
+router.get('/about-me', homeController.about);
 router.get('/courses', courseController.index);
 router.get('/courses/:course', courseController.single);
+
+router.post('/comment' , redirectIfNotAuthenticated.handle , commentValidator.handle() ,homeController.comment);
+router.get('/download/:episode' , courseController.download)
 
 
 module.exports = router
