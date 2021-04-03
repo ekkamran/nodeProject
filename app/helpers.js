@@ -17,7 +17,8 @@ module.exports = class Helpers {
             viewPath : this.viewPath,
             ...this.getGlobalVaribales(),
             old : this.old,
-            date : this.date
+            date : this.date,
+            req : this.req
         }
     }
 
