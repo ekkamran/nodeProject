@@ -4,6 +4,7 @@ const mongoosePaginate = require('mongoose-paginate');
 
 const courseSchema = Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User'},
+    categories : [{ type : Schema.Types.ObjectId, ref: 'Category'}],
     title:{ type: String, required: true },
     slug:{ type: String, required: true },
     type:{ type: String, required: true },
@@ -15,7 +16,7 @@ const courseSchema = Schema({
     time:{ type: String, default: '00:00:00' },
     viewCount:{ type: Number, default: 0 },
     commentCount:{ type: Number, default: 0 },
-}, { timestamps: true , toJSON: {virtuals: true} });
+} , { timestamps: true , toJSON: {virtuals: true} });
 
 courseSchema.plugin(mongoosePaginate);
 
