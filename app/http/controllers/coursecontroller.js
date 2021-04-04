@@ -9,14 +9,20 @@ const bcrypt = require('bcrypt');
 class courseController extends controller {
     
     async index(req , res) {
-        
         let query = {};
+        let { search , type , category } = req.query;
+  
+        if(search) 
+            query.title = new RegExp(search , 'gi');
 
-        if(req.query.search) 
-            query.title = new RegExp(req.query.search , 'gi');
+        if(type && type != 'all')
+            query.type = type;
 
-        if(req.query.type && req.query.type != 'all')
-            query.type = req.query.type;
+        if(category && category != 'all') {
+            category = await Category.findOne({ slug : category});
+            if(category) 
+                query.categories = { $in : [ category.id ]}
+        }
 
         let courses = Course.find({ ...query });
 
@@ -26,7 +32,8 @@ class courseController extends controller {
 
         courses = await courses.exec();
 
-        res.render('home/courses' , { courses });
+        let categories = await Category.find({});
+        res.render('home/courses' , { courses , categories});
     }
 
     async single(req , res) {

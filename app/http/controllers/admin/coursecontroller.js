@@ -143,10 +143,6 @@ class courseController extends controller {
     getUrlImage(dir) {
         return dir.substring(8);
     }
-
-    slug(title) {
-        return title.replace(/([^۰-۹آ-یa-z0-9]|-)+/g , "-")
-    }
 }
 
 module.exports = new courseController();

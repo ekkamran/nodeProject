@@ -113,12 +113,12 @@
                     <ul class="list-unstyled pr-0">
                         <% categories.forEach(category => { %> 
                             <li>
-                                <a href="/courses?category=<%= category.name %>"><%= category.name %></a>
+                                <a href="/courses?category=<%= category.slug %>"><%= category.name %></a>
                                 <% if(category.childs) { %> 
                                     <ul>
                                         <% category.childs.forEach(cate => { %>
                                             <li>
-                                                <a href="/courses?category=<%= cate.name %>"><%= cate.name %></a>    
+                                                <a href="/courses?category=<%= cate.slug %>"><%= cate.name %></a>    
                                             </li>                                    
                                         <% }) %>
                                     </ul>
