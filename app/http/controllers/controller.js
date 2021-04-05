@@ -92,19 +92,19 @@ module.exports=class controller{
         return title.replace(/([^۰-۹آ-یa-z0-9]|-)+/g , "-")
     }
 
-    alert(req, data) {
+    alert(req , data) {
         let title = data.title || '',
-        message = data.messae || '',
-        type = data.type || 'info',
-        button = data.button || null,
-        timer = data.timer || 2000;
+            message = data.message || '',
+            type = data.type || 'info',
+            button = data.button || null,
+            timer = data.timer || 2000;
 
-    req.flash('sweetalert', {title, message, type, button, timer});    
+        req.flash('sweetalert' , { title , message , type , button , timer});
     }
 
-    alertAndBack(req, res, data) {
-        this.alert(req, data);
-        this.back(req,res);
+    alertAndBack(req, res , data) {
+        this.alert(req , data);
+        this.back(req , res);
     }
 }
     
