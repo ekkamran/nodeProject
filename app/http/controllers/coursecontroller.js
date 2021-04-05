@@ -36,6 +36,33 @@ class courseController extends controller {
         res.render('home/courses' , { courses , categories});
     }
 
+    async payment(req, res , next) {
+        try {
+            this.isMongoId(req.body.course);
+
+            let course = await Course.findById(req.body.course);
+            if(! course) {
+                console.log('not found');
+                return;
+            }
+
+            if(await req.user.checkLearning(couse)) {
+                console.log('شما قبلا در این دوره ثبت نام کرده اید');
+                return;
+            }
+
+            if(course.price == 0 && (course.type == 'vip' || course.type == 'free')) {
+                console.log('این دوره مخصوص اعضای ویژه یا رایگان است و قابل خریداری نیست');
+                return;
+            }
+
+            // buy proccess
+
+        } catch (err) {
+            next(err);
+        }
+    }
+
     async single(req , res) {
         let course = await Course.findOneAndUpdate({ slug : req.params.course } , { $inc : { viewCount : 1}})
                                 .populate([
@@ -70,11 +97,11 @@ class courseController extends controller {
                                         ]
                                     }
                                 ]);
-        let categories = await Category.find({ parent : null }).populate('childs').exec();
-        
-        let canUserUse = await this.canUse(req , course);
 
-        res.render('home/single-course' , { course , canUserUse , categories});
+
+        let categories = await Category.find({ parent : null }).populate('childs').exec();
+
+        res.render('home/single-course' , { course , categories});
     }
 
     async download(req , res , next) {
@@ -96,24 +123,6 @@ class courseController extends controller {
        } catch (err) {
            next(err);
        }
-    }
-
-    async canUse(req  , course) {
-        let canUse = false;
-        if(req.isAuthenticated()) {
-            switch (course.type) {
-                case 'vip':
-                    canUse = req.user.isVip()
-                    break;
-                case 'cash':
-                    canUse = req.user.checkLearning(course);
-                    break;
-                default:
-                    canUse = true;
-                    break;
-            }
-        }
-        return canUse;
     }
 
     checkHash(req , episode) {
