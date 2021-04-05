@@ -39,21 +39,32 @@ class courseController extends controller {
     async payment(req, res , next) {
         try {
             this.isMongoId(req.body.course);
-
+            
             let course = await Course.findById(req.body.course);
             if(! course) {
-                console.log('not found');
-                return;
+                return this.alertAndBack(req, res , {
+                    title : 'دقت کنید',
+                    message : 'چنین دوره ای یافت نشد',
+                    type : 'error'
+                });
             }
 
             if(await req.user.checkLearning(couse)) {
-                console.log('شما قبلا در این دوره ثبت نام کرده اید');
-                return;
+                return this.alertAndBack(req, res , {
+                    title : 'دقت کنید',
+                    message : 'شما قبلا در این دوره ثبت نام کرده اید',
+                    type : 'error',
+                    button : 'خیلی خوب'
+                });
             }
 
             if(course.price == 0 && (course.type == 'vip' || course.type == 'free')) {
-                console.log('این دوره مخصوص اعضای ویژه یا رایگان است و قابل خریداری نیست');
-                return;
+                return this.alertAndBack(req, res, {
+                    title : 'دقت کنید',
+                    message : 'این دوره مخصوص اعضای ویژه یا رایگان است و قابل خریداری نیست',
+                    type : 'error',
+                    button : 'خیلی خوب'
+                });
             }
 
             // buy proccess
