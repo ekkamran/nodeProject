@@ -7,11 +7,13 @@ const courseController = require('app/http/controllers/admin/courseController');
 const episodeController = require('app/http/controllers/admin/episodeController');
 const commentController = require('app/http/controllers/admin/commentController');
 const categoryController = require('app/http/controllers/admin/categoryController');
+const userController = require('app/http/controllers/admin/userController');
 
 // validators 
 const courseValidator = require('app/http/validators/courseValidator');
 const episodeValidator = require('app/http/validators/episodeValidator');
 const categoryValidator = require('app/http/validators/categoryValidator');
+const registerValidator = require('app/http/validators/registerValidator');
 
 // Helpers
 const upload = require('app/helpers/uploadImage');
@@ -44,6 +46,13 @@ router.put('/courses/:id' ,
     courseController.update
 );
 router.delete('/courses/:id' , courseController.destroy);
+
+//Users routes
+router.get('/users' , userController.index);
+router.get('/users/create' , userController.create);
+router.post('/users' , registerValidator.handle() , userController.store);
+router.delete('/users/:id' , userController.destroy);
+router.get('/users/:id/toggleadmin' , userController.toggleadmin);
 
 // Episode Routes
 router.get('/episodes' , episodeController.index);
