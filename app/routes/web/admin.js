@@ -21,6 +21,7 @@ const roleValidator = require('app/http/validators/roleValidator');
 
 // Helpers
 const upload = require('app/helpers/uploadImage');
+const gate = require('app/helpers/gate');
 
 // Middlewares
 const convertFileToField = require('app/http/middleware/convertFileToField')

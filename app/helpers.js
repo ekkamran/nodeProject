@@ -4,6 +4,7 @@ const moment = require('moment-jalaali');
 moment.loadPersian({usePersianDigits: true})
 
 module.exports = class Helpers {
+    
     constructor(req, res){
         autoBind(this);
         this.req = req;
