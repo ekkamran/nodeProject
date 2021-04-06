@@ -1,5 +1,6 @@
 const controller = require('app/http/controllers/controller');
 const User = require('app/models/users');
+const Role = require('app/models/role');
 
 class userController extends controller {
     async index(req , res) {
@@ -24,6 +25,36 @@ class userController extends controller {
             return this.back(req , res);
         } catch (err) {
             next(err)
+        }
+    }
+
+    async addrole(req , res ,next) {
+        try {
+            this.isMongoId(req.params.id);
+            
+            let user = await User.findById(req.params.id);
+            let roles = await Role.find({});
+            if( ! user ) this.error('چنین کاربری وجود ندارد' , 404);
+        
+            res.render('admin/users/addrole', { user , roles });            
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async storeRoleForUser(req , res , next) {
+        try {
+            this.isMongoId(req.params.id);
+
+            let user = await User.findById(req.params.id);
+            if( ! user ) this.error('چنین کاربری وجود ندارد' , 404);
+
+            user.set({ roles : req.body.roles });
+            await user.save();
+
+            res.redirect('/admin/users');
+        } catch (err) {
+            next(err);
         }
     }
 
