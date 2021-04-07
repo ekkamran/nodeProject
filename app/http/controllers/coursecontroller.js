@@ -120,7 +120,7 @@ class courseController extends controller {
                 });
 
             let params = {
-                MerchantID : 'f3cc956-f59f-11e6-889a-005056a205be',
+                MerchantID : 'f83cc956-f59f-11e6-889a-005056a205be',
                 Amount : payment.course.price,
                 Authority : req.query.Authority
             }
