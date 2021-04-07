@@ -1,11 +1,13 @@
 const controller = require('app/http/controllers/controller');
 const Course = require('app/models/course');
 const Comment = require('app/models/comment');
+const i18n = require("i18n");
 
 class homeController extends controller {
     
     async index(req , res) {
-        let courses = await Course.find({}).sort({ createdAt : 1}).limit(8).exec();
+        //return res.json(i18n.__('title'))
+        let courses = await Course.find({ lang : req.getLocale()}).sort({ createdAt : 1}).limit(8).exec();
         res.render('home/index' , { courses });
     }
 

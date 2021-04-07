@@ -1,13 +1,14 @@
 const database = require('./database');
+const session = require('./session');
 const layout = require('./layout');
 const service = require('./service');
-const session = require('./session');
+
 
 module.exports = {
     database,
+    session,
     layout,
     service,
-    session,
     port: process.env.APPLICATION_PORT,
     cookie_secretkey: process.env.COOKIE_SECRET_KEY,
     debug: true
