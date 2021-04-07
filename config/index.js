@@ -11,5 +11,7 @@ module.exports = {
     service,
     port: process.env.APPLICATION_PORT,
     cookie_secretkey: process.env.COOKIE_SECRET_KEY,
-    debug: true
+    debug: true,
+    siteurl : process.env.WEBSITE_URL
+
 }
