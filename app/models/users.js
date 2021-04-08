@@ -6,6 +6,7 @@ const mongoosePaginate = require('mongoose-paginate');
 
 const userSchema = Schema({
     name : { type : String , required : true },
+    active : { type : Boolean ,  default : false },
     admin : { type : Boolean ,  default : 0 },
     email : { type : String , unique : true  ,required : true},
     password : { type : String ,  required : true },
@@ -18,21 +19,12 @@ const userSchema = Schema({
 
 userSchema.plugin(mongoosePaginate);
 
-userSchema.pre('save' , function(next) {
+userSchema.methods.hashPassword = function(password) {
     let salt = bcrypt.genSaltSync(15);
-    let hash = bcrypt.hashSync(this.password , salt);
+    let hash = bcrypt.hashSync(password , salt);
 
-    this.password = hash;
-    next();
-});
-
-userSchema.pre('findOneAndUpdate' , function(next) {
-    let salt = bcrypt.genSaltSync(15);
-    let hash = bcrypt.hashSync(this.getUpdate().$set.password , salt);
-
-    this.getUpdate().$set.password = hash;
-    next();
-});
+    return hash;
+}
 
 userSchema.methods.comparePassword = function(password) {
     return bcrypt.compareSync(password , this.password);
@@ -71,3 +63,4 @@ userSchema.methods.checkLearning = function(courseId) {
 }
 
 module.exports = mongoose.model('User' , userSchema);
+

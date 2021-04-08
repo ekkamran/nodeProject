@@ -64,6 +64,14 @@
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script> 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
+    <script>
+      fetch('http://nodejs.roocket.ir/api/v1/user?api_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViNWQ2OWI5ZTUwMmQ3MTU0OGEzNTljOSIsImlhdCI6MTUzMzQ2NDcwNSwiZXhwIjoxNTMzNTUxMTA1fQ.1_UoqAfCYslNPnwHVCovKI2hVHbn7cGDvepwaUricRA')
+        .then(res => res.json() )
+        .then(res => console.log(res))
+        .catch(err => console.log(err));
+      
+
+    </script>
     <% let sweetalert = req.flash('sweetalert')
         if(sweetalert.length) {
           let data = sweetalert[0]; %>

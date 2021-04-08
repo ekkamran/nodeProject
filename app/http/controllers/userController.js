@@ -1,9 +1,67 @@
 const controller = require('app/http/controllers/controller');
 const Payment = require('app/models/payment');
 const request = require('request-promise');
+const ActivationCode = require('app/models/activationCode');
 
 class userController extends controller {
-    
+    async activation(req , res ,next) {
+        try {
+            let activationCode = await ActivationCode.findOne({ code : req.params.code }).populate('user').exec();
+
+            if( ! activationCode ) {
+                this.alert(req , {
+                    title : 'دقت کنید',
+                    message : 'متاسفانه چنین لینک فعال سازی وجود ندارد',
+                    button : 'بسیار خوب'
+                });
+
+                return res.redirect('/');
+            }
+
+            if( activationCode.expire < new Date() ) {
+                this.alert(req , {
+                    title : 'دقت کنید',
+                    message : 'مهلت استفاده از این لینک به پایان رسیده است',
+                    button : 'بسیار خوب'
+                });
+
+                return res.redirect('/');
+            }
+
+            if( activationCode.used  ) {
+                this.alert(req , {
+                    title : 'دقت کنید',
+                    message : 'این لینک قبلا مورد استفاده قرار گرفته است',
+                    button : 'بسیار خوب'
+                });
+
+                return res.redirect('/');
+            }
+
+            let user = activationCode.user;
+            user.$set({ active : true });
+            activationCode.$set({ used : true });
+
+            await user.save();
+            await activationCode.save();
+
+
+            req.logIn(user , err => {
+                user.setRememberToken(res);
+                this.alert(req , {
+                    title : 'با تشکر',
+                    message : 'اکانت شما فعال شد',
+                    button : 'بسیار خوب',
+                    type : 'success'
+                });
+                return res.redirect('/');
+            })
+            
+
+        } catch (err) {
+            next(err);
+        }
+    }
     async index(req , res , next) {
         try {
             res.render('home/panel/index' , { title : 'پنل کاربری'});

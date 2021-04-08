@@ -16,18 +16,8 @@ const rememberLogin = require('app/http/middleware/rememberLogin');
 const helmet = require('helmet');
 const csrf = require('csurf');
 const csrfErrorHandler = require('app/http/middleware/csrfErrorHandler');
-const RateLimit = require('express-rate-limit');
-const apiLimiter = new RateLimit({
-    windowMs : 1000 * 60 * 5,
-    max : 5,
-    // message : "درخواست شما زیاد بوده لطفا 15 دقیقه دیگر دوباره تلاش کنید"
-    handler : function (req, res, /*next*/) {
-        res.json({
-            data : 'درخواست شما زیاد بوده لطفا 15 دقیقه دیگر دوباره تلاش کنید',
-            status : 'error'
-        })
-    }
-});
+const activeUser = require('app/http/middleware/activeUser');
+
 module.exports = class Application{
     constructor(){
           this.setupExpress();
@@ -100,9 +90,10 @@ module.exports = class Application{
          });
     }
 
-    setRouters(){
-        app.use(apiLimiter ,require('app/routes/api'));
-        app.use(csrf({ cookie : true }),require('app/routes/web'));
+    setRouters() {
+        app.use(activeUser.handle);
+        app.use(require('app/routes/api'));
+        app.use(csrf({ cookie : true }) ,require('app/routes/web'));
         app.use(csrfErrorHandler.handle);
     }
 }

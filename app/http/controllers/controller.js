@@ -4,46 +4,45 @@ const { validationResult } = require('express-validator/check');
 const isMongoId = require('validator/lib/isMongoId');
 const sprintf = require('sprintf-js').sprintf;
 
-module.exports=class controller{
+module.exports = class controller {
+    constructor() {
+        autoBind(this);
+        this.recaptchaConfig();
+    }
 
-   constructor(){
-       autoBind(this);
-       this.recaptchaConfig();
-   }
+    recaptchaConfig() {
+        this.recaptcha = new Recaptcha(
+            config.service.recaptcha.client_key,
+            config.service.recaptcha.secret_key , 
+            {...config.service.recaptcha.options}
+        );
+    }
 
-   recaptchaConfig(){
-       this.recaptcha = new Recaptcha(
-        config.service.recaptcha.client_key,
-        config.service.recaptcha.secret_key,
-        {...config.service.recaptcha.options},
-       );
-   }
-
-   recaptchaValidation(req , res) {
-    return new Promise((resolve , reject) => {
-        this.recaptcha.verify(req , (err , data) => {
-            if(err) {
-                req.flash('errors' , 'گزینه امنیتی مربوط به شناسایی روبات خاموش است، لطفا از فعال بودن آن اطمینان حاصل نمایید و مجدد امتحان کنید');
-                this.back(req,res)
-            } else resolve(true);
+    recaptchaValidation(req , res) {
+        return new Promise((resolve , reject) => {
+            this.recaptcha.verify(req , (err , data) => {
+                if(err) {
+                    req.flash('errors' , 'گزینه امنیتی مربوط به شناسایی روبات خاموش است، لطفا از فعال بودن آن اطمینان حاصل نمایید و مجدد امتحان کنید');
+                    this.back(req,res)
+                } else resolve(true);
+            })
         })
-    })
-}
+    }
 
     async validationData(req) {
         const result = validationResult(req);
         if (! result.isEmpty()) {
-        const errors = result.array();
-        const messages = [];
-       
-        errors.forEach(err => messages.push(err.msg));
+            const errors = result.array();
+            const messages = [];
+           
+            errors.forEach(err => messages.push(err.msg));
 
-        req.flash('errors' , messages)
+            req.flash('errors' , messages)
 
-        return false;
+            return false;
         }
 
-    return true;
+        return true;
     }
 
     back(req , res) {
@@ -53,10 +52,10 @@ module.exports=class controller{
 
     isMongoId(paramId) {
         if(! isMongoId(paramId))
-        this.error(404, 'ای دی وارد شده صحیح نمی باشد');
+            this.error('ای دی وارد شده صحیح نیست', 404);
     }
 
-    error(message, status = 500) {
+    error(message , status = 500) {
         let err = new Error(message);
         err.status = status;
         throw err;
@@ -78,14 +77,14 @@ module.exports=class controller{
         });
 
         let minutes = Math.floor(second / 60);
-
+        
         let hours = Math.floor(minutes / 60);
 
         minutes -= hours * 60;
 
-        second = Math.floor((( second / 60 ) % 1 ) * 60 );
-
-        return sprintf('%02d:%02d:%02d' , hours, minutes, second);
+        second = Math.floor(( ( second / 60 ) % 1 ) * 60 );
+    
+        return sprintf('%02d:%02d:%02d' , hours , minutes , second);
     }
 
     slug(title) {
@@ -107,4 +106,3 @@ module.exports=class controller{
         this.back(req , res);
     }
 }
-    
