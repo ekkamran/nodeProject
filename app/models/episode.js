@@ -32,17 +32,16 @@ episodeSchema.methods.typeToPersian = function() {
     }
 }
 
-episodeSchema.methods.download = function(req) {
-
-    if(! req.isAuthenticated()) return '#';
+episodeSchema.methods.download = function(check , user) {
+    if(! check) return '#';
 
     let status = false;
     if(this.type == 'free') {
         status = true;
     } else if(this.type == 'vip') {
-        status = req.user.isVip();
+        status = user.isVip();
     } else if(this.type == 'cash') {
-        status = req.user.checkLearning(this.course)
+        status = user.checkLearning(this.course)
     }
 
     let timestamps = new Date().getTime() + 3600 * 1000 * 12;
@@ -55,14 +54,14 @@ episodeSchema.methods.download = function(req) {
 
     return status ? `/download/${this.id}?mac=${hash}&t=${timestamps}` : '#';
 }
-//33
+
 episodeSchema.methods.path = function() {
     return `${this.course.path()}/${this.number}`;
 }
-//34
-episodeSchema.methods.inc = async function(field, num = 1) {
+
+episodeSchema.methods.inc = async function(field , num = 1) {
     this[field] += num;
     await this.save();
-}
+} 
 
 module.exports = mongoose.model('Episode' , episodeSchema);
